@@ -14,3 +14,6 @@ title = box.find('h1').get_text()
 transcript = box.find('div', class_ = 'full-script').get_text(strip = True, separator= ' ')
 print(title)
 print(transcript)
+
+with open(f'{title}.txt','w+') as file:
+    file.write(transcript)
