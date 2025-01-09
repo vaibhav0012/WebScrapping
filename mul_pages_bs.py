@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 root = 'https://subslikescript.com'
-website =   f'{root}/movies'
+website =  f'{root}/movies'
 result = requests.get(website)
 content = result.text
 

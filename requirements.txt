@@ -1,3 +1,6 @@
 bs4
 lxml
 requests
+selenium==3.141.0 
+urllib3<2.0
+pandas
