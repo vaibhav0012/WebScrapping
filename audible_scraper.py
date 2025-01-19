@@ -18,7 +18,7 @@ options.binary_location = chrome_binary_path
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-gpu")
-# options.add_argument("--headless")  # Optional: Run in headless mode
+options.add_argument("--headless")  # Optional: Run in headless mode
 options.add_argument("--remote-debugging-port=9222")
 
 service = Service(chromedriver_path)
@@ -37,7 +37,7 @@ try:
     last_page = int(pages[-2].text)
 
     curr_page = 1
-    headings, subtitles, authors, timeframe, languages, ratings, ratings_count = [], [], [], [], [], [], []
+    headings, subtitles, authors, timeframe, release_dates, languages, ratings, ratings_count, prices = [], [], [], [], [], [], [], [], []
 
     while curr_page <= last_page:
         print(f"Scraping page {curr_page} of {last_page}...")
@@ -63,16 +63,20 @@ try:
             author = get_text('.//li[contains(@class, "authorLabel")]')
             length = get_text('.//li[contains(@class, "runtimeLabel")]')
             language = get_text('.//li[contains(@class, "languageLabel")]')
+            release_date = get_text('.//li[contains(@class, "releaseDateLabel")]')
             rating = get_text('.//li[contains(@class, "ratingsLabel")]//span[contains(@class, "bc-pub-offscreen")]')
             rating_count = get_text('.//li[contains(@class, "ratingsLabel")]//span[contains(@class, "bc-color-secondary")]')
+            price = get_text('.//div[contains(@class, "adblBuyBoxPrice")]//p//span[2]')
 
             headings.append(heading)
             subtitles.append(subtitle)
             authors.append(author)
             timeframe.append(length)
             languages.append(language)
+            release_dates.append(release_date)
             ratings.append(rating)
             ratings_count.append(rating_count)
+            prices.append(price)
 
         # Go to the next page
         curr_page += 1
@@ -93,7 +97,8 @@ try:
         'timeframe': timeframe,
         'languages': languages,
         'ratings': ratings,
-        'ratings_count': ratings_count
+        'ratings_count': ratings_count,
+        'prices':prices
     })
     df.to_csv('books.csv', index=False)
     print(df.head(20))
